@@ -1,0 +1,16 @@
+node_modules/
+lib/
+dist/
+build/
+*.log
+.DS_Store
+.env
+.env.local
+*.tgz
+coverage/
+.turbo/
+ios/Pods/
+ios/build/
+android/.gradle/
+android/build/
+android/local.properties

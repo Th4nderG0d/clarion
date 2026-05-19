@@ -1,0 +1,60 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "ClarionRecorder",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ClarionRecorder::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ClarionRecorder-Debug-53c3b14fbbfdaa5dc203.json",
+					"name" : "ClarionRecorder",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/6t4f3s5j/x86",
+		"source" : "/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

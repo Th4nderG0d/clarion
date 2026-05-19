@@ -1,0 +1,11 @@
+# ninja log v5
+2488	2539	1779107546561447260	../../../../build/intermediates/cxx/Debug/6t4f3s5j/obj/x86_64/libClarionRecorder.so	d0e0dadeadebab46
+3	2488	1779107546502242575	CMakeFiles/ClarionRecorder.dir/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/nitrogen/generated/shared/c++/HybridClarionRecorderSpec.cpp.o	f92e83e8d4406ffc
+2	1067	1779107545088981427	CMakeFiles/ClarionRecorder.dir/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/nitrogen/generated/android/ClarionRecorderOnLoad.cpp.o	bed407316d42f695
+2	2058	1779107546065416080	CMakeFiles/ClarionRecorder.dir/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/nitrogen/generated/android/c++/JHybridClarionRecorderSpec.cpp.o	7039b636c26734ea
+2	395	1779107544420512054	CMakeFiles/ClarionRecorder.dir/src/main/cpp/cpp-adapter.cpp.o	eecc99cb9a92884a
+3	406	1779124651547013342	CMakeFiles/ClarionRecorder.dir/src/main/cpp/cpp-adapter.cpp.o	eecc99cb9a92884a
+3	1082	1779124652218927857	CMakeFiles/ClarionRecorder.dir/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/nitrogen/generated/android/ClarionRecorderOnLoad.cpp.o	bed407316d42f695
+3	2062	1779124653191098105	CMakeFiles/ClarionRecorder.dir/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/nitrogen/generated/android/c++/JHybridClarionRecorderSpec.cpp.o	7039b636c26734ea
+3	2499	1779124653627358955	CMakeFiles/ClarionRecorder.dir/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/nitrogen/generated/shared/c++/HybridClarionRecorderSpec.cpp.o	f92e83e8d4406ffc
+2499	2565	1779124653702376721	../../../../build/intermediates/cxx/Debug/6t4f3s5j/obj/x86_64/libClarionRecorder.so	d0e0dadeadebab46

@@ -1,0 +1,40 @@
+# Clarion
+
+React Native audio and speech packages for Android and iOS. New Architecture only.
+
+## Packages
+
+| Package | Status | Purpose |
+|---|---|---|
+| [`@clarionhq/recorder`](packages/recorder) | **0.1** | Microphone → AAC `.m4a`. 16 KB compliant. Gapless pause/resume, audio-level meter, file rotation. |
+| [`@clarionhq/core`](packages/core) | **0.1** | Shared types, state machine, error taxonomy. Imported by every engine. |
+
+More engines are in development; this repo is the monorepo they will live in.
+
+## Why
+
+The React Native audio-recording ecosystem hadn't caught up to the New Architecture, Android 15's 16 KB page-size mandate, or modern Hermes / Fabric requirements. Clarion is built from scratch on top of [Nitro Modules](https://nitro.margelo.com) — no legacy bridge, no compatibility shims.
+
+Install and quick-start docs live in each package README.
+
+## Repo
+
+```
+packages/
+  core/        # @clarionhq/core
+  recorder/    # @clarionhq/recorder
+  …
+example/       # bare RN app (also used for end-to-end testing)
+```
+
+Local development uses pnpm workspaces:
+
+```sh
+pnpm install
+pnpm typecheck
+cd example && pnpm start
+```
+
+## License
+
+MIT

@@ -1,0 +1,48 @@
+{
+  "buildFiles": [
+    "/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/6t4f3s5j/prefab/x86/prefab/lib/i686-linux-android/cmake/ReactAndroid/ReactAndroidConfig.cmake",
+    "/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/6t4f3s5j/prefab/x86/prefab/lib/i686-linux-android/cmake/ReactAndroid/ReactAndroidConfigVersion.cmake",
+    "/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/6t4f3s5j/prefab/x86/prefab/lib/i686-linux-android/cmake/fbjni/fbjniConfig.cmake",
+    "/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/6t4f3s5j/prefab/x86/prefab/lib/i686-linux-android/cmake/fbjni/fbjniConfigVersion.cmake",
+    "/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/6t4f3s5j/prefab/x86/prefab/lib/i686-linux-android/cmake/react-native-nitro-modules/react-native-nitro-modulesConfig.cmake",
+    "/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/anveshkumar/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/6t4f3s5j/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/anveshkumar/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/6t4f3s5j/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "ClarionRecorder::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "x86",
+      "artifactName": "ClarionRecorder",
+      "output": "/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/build/intermediates/cxx/Debug/6t4f3s5j/obj/x86/libClarionRecorder.so",
+      "runtimeFiles": [
+        "/Users/anveshkumar/.gradle/caches/8.10.2/transforms/5fe158f8ea163bb35d3bf43c1a22f754/transformed/fbjni-0.7.0/prefab/modules/fbjni/libs/android.x86/libfbjni.so",
+        "/Users/anveshkumar/.gradle/caches/8.10.2/transforms/e92b40c26337e1548fabf8407b0d459d/transformed/react-android-0.77.3-debug/prefab/modules/jsi/libs/android.x86/libjsi.so",
+        "/Users/anveshkumar/Desktop/Personal/clarion/node_modules/react-native-nitro-modules/android/build/intermediates/cxx/Debug/493m1x2o/obj/x86/libNitroModules.so",
+        "/Users/anveshkumar/.gradle/caches/8.10.2/transforms/e92b40c26337e1548fabf8407b0d459d/transformed/react-android-0.77.3-debug/prefab/modules/reactnative/libs/android.x86/libreactnative.so"
+      ]
+    }
+  },
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "/Users/anveshkumar/Library/Android/sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang.lld",
+      "cppCompilerExecutable": "/Users/anveshkumar/Library/Android/sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++.lld"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": [
+    "cpp"
+  ]
+}

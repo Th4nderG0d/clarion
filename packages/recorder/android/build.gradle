@@ -1,0 +1,97 @@
+buildscript {
+  ext.getExtOrDefault = { name ->
+    return rootProject.ext.has(name)
+      ? rootProject.ext.get(name)
+      : project.properties["ClarionRecorder_" + name]
+  }
+
+  repositories {
+    google()
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath "com.android.tools.build:gradle:8.7.2"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${getExtOrDefault('kotlinVersion')}"
+  }
+}
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+apply from: "../nitrogen/generated/android/ClarionRecorder+autolinking.gradle"
+
+android {
+  namespace "com.clarionhq.recorder"
+
+  compileSdkVersion getExtOrDefault("compileSdkVersion").toInteger()
+
+  defaultConfig {
+    minSdkVersion getExtOrDefault("minSdkVersion").toInteger()
+    targetSdkVersion getExtOrDefault("targetSdkVersion").toInteger()
+    consumerProguardFiles "proguard-rules.pro"
+
+    externalNativeBuild {
+      cmake {
+        cppFlags "-O2 -frtti -fexceptions -Wall -Wno-unused-variable -fstack-protector-all"
+        // -Wl,-z,max-page-size=16384 makes the produced .so 16 KB page-aligned —
+        // required by Google Play for new Android 15+ uploads.
+        arguments "-DANDROID_STL=c++_shared",
+                  "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON",
+                  "-DCMAKE_SHARED_LINKER_FLAGS=-Wl,-z,max-page-size=16384"
+        abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+      }
+    }
+  }
+
+  externalNativeBuild {
+    cmake {
+      path "CMakeLists.txt"
+    }
+  }
+
+  buildFeatures {
+    buildConfig false
+    prefab true
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
+  }
+
+  kotlinOptions {
+    jvmTarget = "17"
+  }
+
+  sourceSets {
+    main {
+      manifest.srcFile "src/main/AndroidManifest.xml"
+      java.srcDirs += [
+        "src/main/java",
+        "$projectDir/../nitrogen/generated/android/kotlin",
+      ]
+    }
+  }
+
+  packagingOptions {
+    excludes = [
+      "META-INF/DEPENDENCIES",
+      "META-INF/LICENSE",
+      "META-INF/LICENSE.txt",
+      "META-INF/NOTICE",
+      "META-INF/NOTICE.txt"
+    ]
+  }
+}
+
+repositories {
+  mavenCentral()
+  google()
+}
+
+dependencies {
+  implementation "com.facebook.react:react-android"
+  implementation project(":react-native-nitro-modules")
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1"
+}

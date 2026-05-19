@@ -1,0 +1,6 @@
+# ninja log v5
+0	329	1779099705100624049	CMakeFiles/ClarionRecorder.dir/src/main/cpp/cpp-adapter.cpp.o	3c4c1adfa1cc056a
+0	1121	1779099705888678933	CMakeFiles/ClarionRecorder.dir/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/nitrogen/generated/android/ClarionRecorderOnLoad.cpp.o	f572e67e13169738
+0	2970	1779099707718557483	CMakeFiles/ClarionRecorder.dir/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/nitrogen/generated/android/c++/JHybridClarionRecorderSpec.cpp.o	5ed7ff84166ff107
+0	3567	1779099708302542406	CMakeFiles/ClarionRecorder.dir/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/nitrogen/generated/shared/c++/HybridClarionRecorderSpec.cpp.o	dd031630089f6bcf
+3567	3638	1779099708401399794	../../../../build/intermediates/cxx/Debug/1s161u5y/obj/arm64-v8a/libClarionRecorder.so	405cd928805f4d3a

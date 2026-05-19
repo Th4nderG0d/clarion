@@ -1,0 +1,17 @@
+{
+  "name": "@clarionhq/native",
+  "version": "0.0.1",
+  "description": "Clarion native",
+  "main": "lib/index.js",
+  "module": "lib/index.mjs",
+  "types": "lib/index.d.ts",
+  "files": ["lib", "src", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "clean": "rm -rf lib"
+  },
+  "license": "MIT",
+  "publishConfig": { "access": "public" },
+  "repository": { "type": "git", "url": "https://github.com/Th4nderG0d/clarion", "directory": "packages/native" }
+}

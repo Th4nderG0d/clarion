@@ -1,0 +1,24 @@
+{
+  "$schema": "https://nitro.margelo.com/nitro.schema.json",
+  "cxxNamespace": ["clarion", "recorder"],
+  "ios": {
+    "iosModuleName": "ClarionRecorder"
+  },
+  "android": {
+    "androidNamespace": ["clarion", "recorder"],
+    "androidCxxLibName": "ClarionRecorder"
+  },
+  "autolinking": {
+    "ClarionRecorder": {
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridClarionRecorder"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridClarionRecorder"
+      }
+    }
+  },
+  "ignorePaths": ["node_modules", "lib"]
+}

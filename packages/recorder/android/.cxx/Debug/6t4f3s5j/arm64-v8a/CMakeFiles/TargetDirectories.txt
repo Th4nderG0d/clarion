@@ -1,0 +1,3 @@
+/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/6t4f3s5j/arm64-v8a/CMakeFiles/ClarionRecorder.dir
+/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/6t4f3s5j/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/6t4f3s5j/arm64-v8a/CMakeFiles/rebuild_cache.dir
