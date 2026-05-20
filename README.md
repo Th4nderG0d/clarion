@@ -1,5 +1,9 @@
 # Clarion
 
+[![Typecheck](https://github.com/Th4nderG0d/clarion/actions/workflows/typecheck.yml/badge.svg)](https://github.com/Th4nderG0d/clarion/actions/workflows/typecheck.yml)
+[![Android](https://github.com/Th4nderG0d/clarion/actions/workflows/android.yml/badge.svg)](https://github.com/Th4nderG0d/clarion/actions/workflows/android.yml)
+[![iOS](https://github.com/Th4nderG0d/clarion/actions/workflows/ios.yml/badge.svg)](https://github.com/Th4nderG0d/clarion/actions/workflows/ios.yml)
+
 React Native audio and speech packages for Android and iOS. New Architecture only.
 
 ## Packages

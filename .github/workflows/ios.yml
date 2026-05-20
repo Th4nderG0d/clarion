@@ -1,0 +1,63 @@
+name: iOS
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+          bundler-cache: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: CocoaPods install
+        working-directory: example/ios
+        run: |
+          gem install cocoapods -v 1.15.2 --no-document
+          LANG=en_US.UTF-8 pod install
+
+      - name: Pick an iOS Simulator
+        id: sim
+        run: |
+          DEST=$(xcrun simctl list devices available --json | python3 -c '
+          import json, sys
+          data=json.load(sys.stdin)
+          for runtime, devices in data["devices"].items():
+              if "iOS" not in runtime: continue
+              for d in devices:
+                  if d.get("isAvailable") and "iPhone" in d.get("name",""):
+                      print(d["udid"]); sys.exit()
+          ')
+          echo "udid=$DEST" >> "$GITHUB_OUTPUT"
+
+      - name: xcodebuild
+        working-directory: example/ios
+        run: |
+          xcodebuild \
+            -workspace ClarionExample.xcworkspace \
+            -scheme ClarionExample \
+            -sdk iphonesimulator \
+            -destination "platform=iOS Simulator,id=${{ steps.sim.outputs.udid }}" \
+            -configuration Debug \
+            build CODE_SIGNING_ALLOWED=NO | tail -200
