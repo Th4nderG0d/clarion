@@ -1,6 +1,0 @@
-/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/1s161u5y/prefab/x86/prefab/lib/i686-linux-android/cmake/ReactAndroid/ReactAndroidConfig.cmake
-/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/1s161u5y/prefab/x86/prefab/lib/i686-linux-android/cmake/ReactAndroid/ReactAndroidConfigVersion.cmake
-/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/1s161u5y/prefab/x86/prefab/lib/i686-linux-android/cmake/fbjni/fbjniConfig.cmake
-/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/1s161u5y/prefab/x86/prefab/lib/i686-linux-android/cmake/fbjni/fbjniConfigVersion.cmake
-/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/1s161u5y/prefab/x86/prefab/lib/i686-linux-android/cmake/react-native-nitro-modules/react-native-nitro-modulesConfig.cmake
-/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/CMakeLists.txt

@@ -1,6 +1,0 @@
-/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/6t4f3s5j/prefab/armeabi-v7a/prefab/lib/arm-linux-androideabi/cmake/ReactAndroid/ReactAndroidConfig.cmake
-/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/6t4f3s5j/prefab/armeabi-v7a/prefab/lib/arm-linux-androideabi/cmake/ReactAndroid/ReactAndroidConfigVersion.cmake
-/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/6t4f3s5j/prefab/armeabi-v7a/prefab/lib/arm-linux-androideabi/cmake/fbjni/fbjniConfig.cmake
-/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/6t4f3s5j/prefab/armeabi-v7a/prefab/lib/arm-linux-androideabi/cmake/fbjni/fbjniConfigVersion.cmake
-/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/.cxx/Debug/6t4f3s5j/prefab/armeabi-v7a/prefab/lib/arm-linux-androideabi/cmake/react-native-nitro-modules/react-native-nitro-modulesConfig.cmake
-/Users/anveshkumar/Desktop/Personal/clarion/example/node_modules/@clarionhq/recorder/android/CMakeLists.txt
