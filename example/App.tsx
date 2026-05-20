@@ -247,9 +247,7 @@ function RecognizerTab(): React.JSX.Element {
             <Text style={styles.finalText} selectable>
               {finalResult.text || '<empty>'}
             </Text>
-            {finalResult.language && (
-              <Text style={styles.resultMeta}>{finalResult.language}</Text>
-            )}
+            <TranscriptDetails result={finalResult} />
           </>
         )}
       </View>
@@ -285,6 +283,67 @@ function StateMeterRow({
       </View>
       <Text style={styles.meterLabel}>rms {rms.toFixed(3)}</Text>
     </>
+  );
+}
+
+function TranscriptDetails({
+  result,
+}: {
+  result: TranscriptResult;
+}): React.JSX.Element {
+  const shortId = (s: string) => (s.length > 8 ? s.slice(0, 8) : s);
+  const pct = (c?: number) => (c == null ? '—' : `${Math.round(c * 100)}%`);
+  const ms = (n?: number) => (n == null ? '—' : `${Math.round(n)} ms`);
+  const segs = result.segments ?? [];
+
+  return (
+    <View style={styles.metaWrap}>
+      <View style={styles.metaRow}>
+        <Meta label="LANG" value={result.language ?? '—'} />
+        <Meta label="CONF" value={pct(result.confidence)} />
+        <Meta label="OFFSET" value={ms(result.offsetMs)} />
+        <Meta label="DURATION" value={ms(result.durationMs)} />
+      </View>
+      <View style={styles.metaRow}>
+        <Meta label="ID" value={shortId(result.id)} mono />
+        <Meta label="SESSION" value={shortId(result.sessionId)} mono />
+        <Meta label="SEGMENTS" value={String(segs.length)} />
+      </View>
+      {segs.length > 0 && (
+        <View style={styles.segmentsBox}>
+          <Text style={styles.metaLabel}>WORD SEGMENTS (iOS)</Text>
+          {segs.slice(0, 6).map((s, i) => (
+            <Text key={i} style={styles.segmentLine}>
+              {`${Math.round(s.startMs)}ms +${Math.round(s.durationMs)}ms  ${s.text}${
+                s.confidence != null ? `  ·  ${pct(s.confidence)}` : ''
+              }`}
+            </Text>
+          ))}
+          {segs.length > 6 && (
+            <Text style={styles.segmentLine}>+{segs.length - 6} more…</Text>
+          )}
+        </View>
+      )}
+    </View>
+  );
+}
+
+function Meta({
+  label,
+  value,
+  mono = false,
+}: {
+  label: string;
+  value: string;
+  mono?: boolean;
+}): React.JSX.Element {
+  return (
+    <View style={styles.metaCell}>
+      <Text style={styles.metaLabel}>{label}</Text>
+      <Text style={[styles.metaValue, mono && styles.metaValueMono]}>
+        {value}
+      </Text>
+    </View>
   );
 }
 
@@ -472,6 +531,30 @@ const styles = StyleSheet.create({
   resultMeta: {color: '#9ca3af', fontSize: 11, marginTop: 6},
   partialText: {color: '#fbbf24', fontSize: 16, fontStyle: 'italic'},
   finalText: {color: '#a7f3d0', fontSize: 16, fontWeight: '600'},
+
+  metaWrap: {marginTop: 10},
+  metaRow: {flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginTop: 6},
+  metaCell: {minWidth: 64},
+  metaLabel: {color: '#6b7280', fontSize: 10, letterSpacing: 1.1},
+  metaValue: {color: '#e5e7eb', fontSize: 12, fontWeight: '600', marginTop: 2},
+  metaValueMono: {
+    fontFamily: Platform.select({ios: 'Menlo', android: 'monospace'}),
+    fontWeight: '500',
+  },
+  segmentsBox: {
+    marginTop: 10,
+    padding: 8,
+    backgroundColor: '#0a0f1e',
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#1f2937',
+  },
+  segmentLine: {
+    color: '#cbd5e1',
+    fontSize: 11,
+    fontFamily: Platform.select({ios: 'Menlo', android: 'monospace'}),
+    marginTop: 4,
+  },
 
   logHeader: {marginTop: 18},
   logHeaderText: {color: '#888', fontSize: 11, letterSpacing: 1.2},
