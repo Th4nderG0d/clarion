@@ -1,6 +1,9 @@
 PODS:
   - boost (1.84.0)
-  - clarionhq-recorder (0.0.1):
+  - clarionhq-recognizer (0.0.0):
+    - NitroModules
+    - React-Core
+  - clarionhq-recorder (0.1.1):
     - NitroModules
     - React-Core
   - DoubleConversion (1.1.6)
@@ -1530,6 +1533,7 @@ PODS:
 
 DEPENDENCIES:
   - boost (from `../../node_modules/react-native/third-party-podspecs/boost.podspec`)
+  - "clarionhq-recognizer (from `../node_modules/@clarionhq/recognizer`)"
   - "clarionhq-recorder (from `../node_modules/@clarionhq/recorder`)"
   - DoubleConversion (from `../../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - fast_float (from `../../node_modules/react-native/third-party-podspecs/fast_float.podspec`)
@@ -1607,6 +1611,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   boost:
     :podspec: "../../node_modules/react-native/third-party-podspecs/boost.podspec"
+  clarionhq-recognizer:
+    :path: "../node_modules/@clarionhq/recognizer"
   clarionhq-recorder:
     :path: "../node_modules/@clarionhq/recorder"
   DoubleConversion:
@@ -1745,7 +1751,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
-  clarionhq-recorder: 9e0c66b0914f4e560499a1a169958c3776348f90
+  clarionhq-recognizer: dbf8ce16e6eb2245388381dab70a91ddc89515a4
+  clarionhq-recorder: 25b7300a91fd1b817ed0d9203fd5262d910457d6
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: 23d8c5470c648a635893dc0956c6dbaead54b656

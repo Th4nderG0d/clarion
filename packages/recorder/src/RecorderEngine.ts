@@ -3,6 +3,7 @@ import {
   ClarionError,
   DEFAULT_AUDIO_FORMAT,
   assertTransition,
+  fromNativeError,
   type ClarionEngine,
   type ClarionEvent,
   type EngineKind,
@@ -284,14 +285,7 @@ export class RecorderEngine implements ClarionEngine {
   }
 
   private handleNativeError(err: unknown, where: string): void {
-    const error =
-      err instanceof ClarionError
-        ? err
-        : new ClarionError({
-            code: 'INTERNAL_ERROR',
-            message: `Recorder ${where} failed: ${String(err)}`,
-            cause: err,
-          });
+    const error = fromNativeError(err, `Recorder ${where} failed`);
     this.emitter.emit({ type: 'error', error });
     this.setState('error');
   }

@@ -1,0 +1,17 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <uses-permission android:name="android.permission.RECORD_AUDIO" />
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-feature android:name="android.hardware.microphone" android:required="false" />
+
+  <!--
+    Android 11+ package visibility: SpeechRecognizer talks to a separate
+    RecognitionService package (usually Google's). Without this <queries>
+    block, SpeechRecognizer.isRecognitionAvailable() returns false on
+    target SDK 30+.
+  -->
+  <queries>
+    <intent>
+      <action android:name="android.speech.RecognitionService" />
+    </intent>
+  </queries>
+</manifest>

@@ -249,11 +249,35 @@ internal final class RecorderSession {
 
   private func configureAudioSession() throws {
     let session = AVAudioSession.sharedInstance()
-    try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
+    var options: AVAudioSession.CategoryOptions = [.defaultToSpeaker]
+    if #available(iOS 18.0, *) {
+      options.insert(.allowBluetoothHFP)
+    } else {
+      options.insert(.allowBluetooth)
+    }
+    try session.setCategory(.playAndRecord, mode: .default, options: options)
     try session.setActive(true, options: .notifyOthersOnDeactivation)
   }
 
   private func ensurePermission() async throws {
+    if #available(iOS 17.0, *) {
+      switch AVAudioApplication.shared.recordPermission {
+      case .granted:
+        return
+      case .denied:
+        throw RecorderError(code: "PERMISSION_DENIED", message: "Microphone permission denied")
+      default:
+        // Undetermined — prompt the user. iOS uses NSMicrophoneUsageDescription
+        // from Info.plist as the prompt copy.
+        let granted = await withCheckedContinuation { (cont: CheckedContinuation<Bool, Never>) in
+          AVAudioApplication.requestRecordPermission { cont.resume(returning: $0) }
+        }
+        if !granted {
+          throw RecorderError(code: "PERMISSION_DENIED", message: "Microphone permission denied")
+        }
+      }
+      return
+    }
     let session = AVAudioSession.sharedInstance()
     switch session.recordPermission {
     case .granted:
