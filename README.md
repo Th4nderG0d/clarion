@@ -4,21 +4,24 @@
 [![Android](https://github.com/Th4nderG0d/clarion/actions/workflows/android.yml/badge.svg)](https://github.com/Th4nderG0d/clarion/actions/workflows/android.yml)
 [![iOS](https://github.com/Th4nderG0d/clarion/actions/workflows/ios.yml/badge.svg)](https://github.com/Th4nderG0d/clarion/actions/workflows/ios.yml)
 
-React Native audio and speech packages for Android and iOS. New Architecture only.
+React Native audio + speech for iOS & Android. New Architecture only, 16 KB compliant, built on [Nitro Modules](https://nitro.margelo.com).
+
+Microphone capture, on-device speech recognition, and Microsoft Azure cloud STT — one consistent `ClarionEngine` interface across all of them.
 
 ## Packages
 
-| Package | Status | Purpose |
+| Package | Version | Purpose |
 |---|---|---|
-| [`@clarionhq/core`](packages/core) | **0.1** | Shared types, state machine, error taxonomy. Imported by every engine. |
-| [`@clarionhq/recorder`](packages/recorder) | **0.1** | Microphone → AAC `.m4a`. 16 KB compliant. Gapless pause/resume, audio-level meter, file rotation. |
-| [`@clarionhq/recognizer`](packages/recognizer) | **dev** | Platform speech recognition — `SFSpeechRecognizer` (iOS) / `SpeechRecognizer` (Android). Partial + final transcripts, per-word segments (iOS), availability checks. |
-
-More engines are in development; this repo is the monorepo they will live in.
+| [`@clarionhq/core`](packages/core) | `0.2.0` | Shared types, state machine, error taxonomy, telemetry contracts. Imported by every engine. |
+| [`@clarionhq/recorder`](packages/recorder) | `0.1.2` | Microphone → AAC `.m4a`. Gapless pause/resume, audio-level meter, file rotation. |
+| [`@clarionhq/recognizer`](packages/recognizer) | `0.1.0` | Platform speech recognition — `SFSpeechRecognizer` (iOS) / `SpeechRecognizer` (Android). Partial + final transcripts, per-word segments on iOS. |
+| [`@clarionhq/azure`](packages/azure) | `0.2.0` | Microsoft Cognitive Services Speech SDK wrapper. Subscription key or token-provider auth, diarization, mid-session network-drop recovery. |
+| [`@clarionhq/hybrid`](packages/hybrid) | _coming 0.1.0_ | Combines the above — connectivity-routed, race (fast partials + accurate finals), and capture-and-recognize modes. |
+| [`@clarionhq/audio-tap`](packages/audio-tap) | _coming 0.1.0_ | Shared microphone fan-out: open the mic once, route PCM to multiple consumers. Used internally by `hybrid`. |
 
 ## Why
 
-The React Native audio-recording ecosystem hadn't caught up to the New Architecture, Android 15's 16 KB page-size mandate, or modern Hermes / Fabric requirements. Clarion is built from scratch on top of [Nitro Modules](https://nitro.margelo.com) — no legacy bridge, no compatibility shims.
+The React Native audio-and-speech ecosystem hadn't caught up to the New Architecture, Android 15's 16 KB page-size mandate, or modern Hermes / Fabric requirements. Clarion is built from scratch on top of Nitro Modules — no legacy bridge, no compatibility shims, no `requireNativeComponent`. Every engine shares the same `ClarionEngine` interface and event stream from `@clarionhq/core`, so swapping recorder for recognizer for azure is a config change.
 
 Install and quick-start docs live in each package README.
 
