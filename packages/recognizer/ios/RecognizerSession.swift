@@ -34,6 +34,10 @@ internal final class RecognizerSession {
   /// late results, etc.) so they don't surface as spurious errors.
   private var active: Bool = false
 
+  /// Watches AVAudioSession interruption + route changes so we can surface them
+  /// as clean ClarionErrors. Created in prepare(), torn down in release().
+  private var audioMonitor: AudioSessionMonitor?
+
   init(config: RecognizerConfig, callbacks: RecognizerCallbacks) {
     self.config = config
     self.callbacks = callbacks
@@ -62,6 +66,34 @@ internal final class RecognizerSession {
     }
     self.recognizer = recognizer
     try configureAudioSession()
+    installAudioMonitor()
+  }
+
+  private func installAudioMonitor() {
+    audioMonitor = AudioSessionMonitor(
+      onInterruptionBegan: { [weak self] in
+        guard let self, self.active else { return }
+        self.callbacks?.onError(RecognizerError(
+          code: "AUDIO_SESSION_INTERRUPTED",
+          message: "Speech recognition was interrupted (phone call, Siri, etc.).",
+          recoverable: true
+        ))
+      },
+      onInterruptionEnded: { _ in /* JS layer decides whether to retry */ },
+      onRouteChanged: { [weak self] reason in
+        guard let self, self.active else { return }
+        switch reason {
+        case .oldDeviceUnavailable, .newDeviceAvailable, .override:
+          self.callbacks?.onError(RecognizerError(
+            code: "AUDIO_ROUTE_CHANGED",
+            message: "Audio route changed (reason \(reason.rawValue)).",
+            recoverable: true
+          ))
+        default:
+          return
+        }
+      }
+    )
   }
 
   func start() throws {
@@ -177,6 +209,7 @@ internal final class RecognizerSession {
     await discard()
     try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
     recognizer = nil
+    audioMonitor = nil  // observers cleaned up in deinit
     callbacks?.onState("released")
   }
 

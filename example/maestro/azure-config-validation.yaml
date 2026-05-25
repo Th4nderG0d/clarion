@@ -1,0 +1,18 @@
+# Smoke §1: bad key → inline error, no native call.
+appId: dev.clarionhq.example
+---
+- launchApp:
+    clearState: true
+- tapOn: "AZURE"
+- assertVisible: "AZURE"
+
+# Too-short subscription key → ClarionError at construction
+- tapOn:
+    text: "subscription key"
+- eraseText
+- inputText: "x"
+- tapOn:
+    text: "Start"
+
+# Inline error should appear with the validator's "looks too short" message.
+- assertVisible: ".*looks too short.*"

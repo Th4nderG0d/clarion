@@ -7,5 +7,7 @@ export * from './permissions';
 export * from './engine';
 export * from './emitter';
 export * from './transitions';
+export * from './validators';
+export * from './settings';
 
 export const CLARION_CORE_VERSION = '0.0.1';

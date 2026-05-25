@@ -1,17 +1,75 @@
 {
   "name": "@clarionhq/azure",
-  "version": "0.0.1",
-  "description": "Clarion azure",
+  "version": "0.2.0",
+  "description": "Clarion azure — Microsoft Cognitive Services Speech SDK wrapper for React Native",
   "main": "lib/index.js",
-  "module": "lib/index.mjs",
   "types": "lib/index.d.ts",
-  "files": ["lib", "src", "README.md", "LICENSE"],
+  "react-native": "src/index.ts",
+  "source": "src/index.ts",
+  "files": [
+    "lib",
+    "src",
+    "android/src",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "android/CMakeLists.txt",
+    "android/proguard-rules.pro",
+    "ios",
+    "nitrogen",
+    "nitro.json",
+    "react-native.config.js",
+    "clarionhq-azure.podspec",
+    "README.md",
+    "LICENSE",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/.*"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "clean": "rm -rf lib"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "nitro:codegen": "nitrogen",
+    "clean": "rm -rf lib nitrogen"
+  },
+  "keywords": [
+    "react-native",
+    "speech",
+    "speech-recognition",
+    "stt",
+    "voice",
+    "transcription",
+    "azure",
+    "microsoft-cognitive-services",
+    "cognitive-services",
+    "nitro-modules",
+    "turbomodule",
+    "fabric",
+    "new-architecture"
+  ],
+  "dependencies": {
+    "@clarionhq/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=18.3.1",
+    "react-native": ">=0.77.0",
+    "react-native-nitro-modules": ">=0.35.0"
+  },
+  "devDependencies": {
+    "nitrogen": "^0.35.6",
+    "react": "18.3.1",
+    "react-native": "0.77.3",
+    "react-native-nitro-modules": "^0.35.6"
   },
   "license": "MIT",
-  "publishConfig": { "access": "public" },
-  "repository": { "type": "git", "url": "https://github.com/Th4nderG0d/clarion", "directory": "packages/azure" }
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Th4nderG0d/clarion",
+    "directory": "packages/azure"
+  }
 }

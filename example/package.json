@@ -11,9 +11,11 @@
     "pods": "cd ios && bundle exec pod install"
   },
   "dependencies": {
+    "@clarionhq/azure": "workspace:*",
     "@clarionhq/core": "workspace:*",
     "@clarionhq/recognizer": "workspace:*",
     "@clarionhq/recorder": "workspace:*",
+    "@react-native-community/netinfo": "^12.0.1",
     "react": "18.3.1",
     "react-native": "0.77.3",
     "react-native-nitro-modules": "^0.35.6"

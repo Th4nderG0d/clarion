@@ -1,0 +1,35 @@
+# UX: reset link resets state cleanly so Start can be tapped again.
+appId: dev.clarionhq.example
+---
+- launchApp:
+    clearState: true
+- tapOn: "AZURE"
+- tapOn:
+    text: "subscription key"
+- eraseText
+- inputText: ${CLARION_AZURE_KEY}
+- tapOn:
+    text: "region.*"
+- eraseText
+- inputText: ${CLARION_AZURE_REGION}
+- tapOn: "Start"
+
+- runFlow:
+    when:
+      visible: "Allow|While using"
+    commands:
+      - tapOn: "Allow|While using"
+
+- extendedWaitUntil:
+    visible: "recording"
+    timeout: 10000
+
+# Reset link is disabled during recording — stop first, then reset.
+- tapOn: "Stop"
+- extendedWaitUntil:
+    visible: "idle"
+    timeout: 5000
+
+# Now reset should work.
+- tapOn: "reset"
+- assertVisible: "Start"

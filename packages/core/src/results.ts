@@ -57,4 +57,9 @@ export interface TranscriptResult {
   durationMs?: number;
   /** Word/phrase-level segments — iOS only, omitted on Android. */
   segments?: TranscriptSegment[];
+  /**
+   * Speaker label from diarization (e.g. "Guest-1"). Populated only by the
+   * Azure engine when `enableSpeakerDiarization` is true.
+   */
+  speakerId?: string;
 }

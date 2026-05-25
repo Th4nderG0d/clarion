@@ -1,0 +1,42 @@
+# Smoke §2: real key + region → connect → start → recording → stop → idle.
+# Requires CLARION_AZURE_KEY env var (F0 key fine).
+appId: dev.clarionhq.example
+---
+- launchApp:
+    clearState: true
+- tapOn: "AZURE"
+
+- tapOn:
+    text: "subscription key"
+- eraseText
+- inputText: ${CLARION_AZURE_KEY}
+
+- tapOn:
+    text: "region.*"
+- eraseText
+- inputText: ${CLARION_AZURE_REGION}
+
+- tapOn: "Start"
+
+# Grant mic permission if it appears.
+- runFlow:
+    when:
+      visible: "Allow|While using"
+    commands:
+      - tapOn:
+          text: "Allow|While using"
+
+# Expect the recording state within 10s (prep + audio open).
+- extendedWaitUntil:
+    visible: "recording"
+    timeout: 10000
+
+# Let the engine see ~2s of audio so it can fire a phrase final.
+- waitForAnimationToEnd
+
+- tapOn: "Stop"
+
+# Should settle back to idle quickly (optimistic stop).
+- extendedWaitUntil:
+    visible: "idle"
+    timeout: 5000

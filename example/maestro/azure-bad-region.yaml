@@ -1,0 +1,22 @@
+# Smoke §1+§3 hybrid: bogus region triggers shape error from validator OR pre-flight 404.
+appId: dev.clarionhq.example
+---
+- launchApp:
+    clearState: true
+- tapOn: "AZURE"
+- tapOn:
+    text: "subscription key"
+- eraseText
+- inputText: ${CLARION_AZURE_KEY}
+- tapOn:
+    text: "region.*"
+- eraseText
+- inputText: "eastusxyz"
+- tapOn: "Start"
+
+# A non-existent region's DNS lookup fails before HTTP — the engine surfaces
+# NETWORK_UNAVAILABLE. A real-but-wrong region would get INVALID_CONFIG via 404.
+# Match either outcome.
+- extendedWaitUntil:
+    visible: ".*(NETWORK_UNAVAILABLE|INVALID_CONFIG|reach Azure|region).*"
+    timeout: 15000

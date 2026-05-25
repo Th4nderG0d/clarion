@@ -21,6 +21,10 @@ internal final class RecorderSession {
   private var lastLevelEmitMs: Double = 0
   private var totalBytesWritten: Int64 = 0
 
+  /// Observes AVAudioSession interruption + route changes. Set up in prepare(),
+  /// torn down on release.
+  private var audioMonitor: AudioSessionMonitor?
+
   init(config: RecorderConfig, callbacks: RecorderCallbacks) {
     self.config = config
     self.callbacks = callbacks
@@ -39,6 +43,37 @@ internal final class RecorderSession {
       || inputFormat.channelCount != target.channelCount {
       converter = AVAudioConverter(from: inputFormat, to: target)
     }
+    installAudioMonitor()
+  }
+
+  /// Watch for interruptions (phone call, Siri, alarm) and route changes
+  /// (BT/headphones in/out). Emits clean ClarionErrors instead of leaving the
+  /// recording in an inconsistent silent state.
+  private func installAudioMonitor() {
+    audioMonitor = AudioSessionMonitor(
+      onInterruptionBegan: { [weak self] in
+        guard let self, self.running else { return }
+        self.callbacks?.onError(RecorderError(
+          code: "AUDIO_SESSION_INTERRUPTED",
+          message: "Recording was interrupted (phone call, Siri, etc.).",
+          recoverable: true
+        ))
+      },
+      onInterruptionEnded: { _ in /* JS layer decides whether to resume */ },
+      onRouteChanged: { [weak self] reason in
+        guard let self, self.running else { return }
+        switch reason {
+        case .oldDeviceUnavailable, .newDeviceAvailable, .override:
+          self.callbacks?.onError(RecorderError(
+            code: "AUDIO_ROUTE_CHANGED",
+            message: "Audio route changed (reason \(reason.rawValue)).",
+            recoverable: true
+          ))
+        default:
+          return
+        }
+      }
+    )
   }
 
   func start() throws {
@@ -47,6 +82,8 @@ internal final class RecorderSession {
     }
 
     let directory = resolveOutputDirectory()
+    try ensureSufficientStorage(at: directory)
+
     encodeFile = try EncodeFile.open(
       in: directory,
       filenamePrefix: config.filenamePrefix ?? RecorderConstants.defaultFilenamePrefix,
@@ -121,6 +158,7 @@ internal final class RecorderSession {
   func release() async {
     if running { await discard() }
     try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+    audioMonitor = nil  // deinit removes notification observers
     callbacks?.onState("released")
   }
 
@@ -245,6 +283,35 @@ internal final class RecorderSession {
     }
     let cache = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
     return cache.appendingPathComponent(RecorderConstants.defaultCacheSubdir, isDirectory: true)
+  }
+
+  /// Fail fast with STORAGE_FULL if there's not enough room to safely begin
+  /// recording. AAC at 32 kbps is ~4 KB/s — 50 MB lets you record for ~3 hours.
+  /// We pick a conservative floor; long recordings should still poll separately.
+  private func ensureSufficientStorage(at directory: URL) throws {
+    let minFreeBytes: Int64 = 50 * 1024 * 1024  // 50 MB
+    let free = freeBytes(at: directory)
+    if free < minFreeBytes {
+      throw RecorderError(
+        code: "STORAGE_FULL",
+        message: "Not enough free storage to start recording. "
+          + "Have \(free / 1024 / 1024) MB free, need at least 50 MB.",
+        recoverable: true
+      )
+    }
+  }
+
+  private func freeBytes(at directory: URL) -> Int64 {
+    // attributesOfFileSystem returns volume-wide free space; the directory
+    // doesn't have to exist yet (we use its parent).
+    let probe = FileManager.default.fileExists(atPath: directory.path)
+      ? directory.path
+      : directory.deletingLastPathComponent().path
+    guard let attrs = try? FileManager.default.attributesOfFileSystem(forPath: probe),
+          let free = attrs[.systemFreeSize] as? NSNumber else {
+      return Int64.max  // Couldn't check — don't block; let the OS surface IO_ERROR if it actually fails.
+    }
+    return free.int64Value
   }
 
   private func configureAudioSession() throws {

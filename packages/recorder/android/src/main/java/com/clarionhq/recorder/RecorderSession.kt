@@ -51,10 +51,14 @@ internal class RecorderSession(
   @Volatile private var totalBytesWritten = 0L
   @Volatile private var lastLevelEmitMs = 0L
 
+  /** Watches audio focus changes so we can surface clean INTERRUPTED errors. */
+  private var focusMonitor: AudioFocusMonitor? = null
+
   private data class PcmChunk(val bytes: ByteArray, val isEos: Boolean)
 
   fun prepare() {
     requirePermission()
+    installFocusMonitor()
     audioRecord = AudioRecord.Builder()
       .setAudioSource(MediaRecorder.AudioSource.MIC)
       .setAudioFormat(
@@ -76,6 +80,7 @@ internal class RecorderSession(
 
   fun start() {
     val record = audioRecord ?: throw RecorderError("ENGINE_NOT_READY", "Call prepare() first")
+    RecorderStorageGuard.ensureSufficientStorage(resolveOutputDir())
     sessionStartMs = System.currentTimeMillis()
     totalBytesWritten = 0L
     pcmQueue.clear()
@@ -153,7 +158,37 @@ internal class RecorderSession(
     if (running.get()) discard()
     audioRecord?.release()
     audioRecord = null
+    focusMonitor?.release()
+    focusMonitor = null
     callbacks.onState("released")
+  }
+
+  /**
+   * Acquire audio focus + surface losses as clean AUDIO_SESSION_INTERRUPTED.
+   * A permanent loss stops capture; transient losses (notification, brief
+   * ducking) leave the JS layer to decide whether to keep recording.
+   */
+  private fun installFocusMonitor() {
+    if (focusMonitor != null) return
+    val m = AudioFocusMonitor(
+      context = context,
+      onFocusLost = { transient ->
+        if (!running.get()) return@AudioFocusMonitor
+        callbacks.onError(
+          RecorderError(
+            code = "AUDIO_SESSION_INTERRUPTED",
+            message = if (transient)
+              "Audio focus lost transiently (another app, notification)."
+            else
+              "Audio focus permanently lost — recording stopped.",
+            recoverable = transient,
+          ),
+        )
+      },
+      onFocusRegained = { /* JS layer decides whether to resume */ },
+    )
+    m.acquire()
+    focusMonitor = m
   }
 
   private fun captureLoop() {
@@ -303,11 +338,13 @@ internal class RecorderSession(
     )
   }
 
-  private fun openEncodeFile(): EncodeFile {
-    val baseDir = config.outputDirectory?.let { File(it) }
+  private fun resolveOutputDir(): File =
+    config.outputDirectory?.let { File(it) }
       ?: File(context.cacheDir, RecorderConstants.DEFAULT_CACHE_SUBDIR)
+
+  private fun openEncodeFile(): EncodeFile {
     return EncodeFile.open(
-      outputDir = baseDir,
+      outputDir = resolveOutputDir(),
       filenamePrefix = config.filenamePrefix ?: RecorderConstants.DEFAULT_FILENAME_PREFIX,
       sampleRate = config.sampleRate,
       channels = config.channels,

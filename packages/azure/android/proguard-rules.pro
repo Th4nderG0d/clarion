@@ -1,0 +1,2 @@
+-keep class com.clarionhq.azure.** { *; }
+-keep class com.microsoft.cognitiveservices.speech.** { *; }

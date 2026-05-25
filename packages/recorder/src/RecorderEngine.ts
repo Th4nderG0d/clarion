@@ -60,6 +60,36 @@ export class RecorderEngine implements ClarionEngine {
   private currentState: EngineState = 'idle';
 
   constructor(options: RecorderEngineOptions = {}) {
+    // Pre-flight: catch obviously bad configs before any native work.
+    if (
+      options.rotateAfterMs !== undefined &&
+      (options.rotateAfterMs <= 0 || !Number.isFinite(options.rotateAfterMs))
+    ) {
+      throw new ClarionError({
+        code: 'INVALID_CONFIG',
+        message: `rotateAfterMs must be a positive number, got ${options.rotateAfterMs}`,
+        where: 'config-validation',
+      });
+    }
+    if (
+      options.audioLevelIntervalMs !== undefined &&
+      (options.audioLevelIntervalMs <= 0 ||
+        !Number.isFinite(options.audioLevelIntervalMs))
+    ) {
+      throw new ClarionError({
+        code: 'INVALID_CONFIG',
+        message: `audioLevelIntervalMs must be a positive number, got ${options.audioLevelIntervalMs}`,
+        where: 'config-validation',
+      });
+    }
+    if (options.aacBitrate !== undefined && options.aacBitrate <= 0) {
+      throw new ClarionError({
+        code: 'INVALID_CONFIG',
+        message: `aacBitrate must be > 0, got ${options.aacBitrate}`,
+        where: 'config-validation',
+      });
+    }
+
     this.options = options;
     this.native = createNativeRecorder();
     this.bindNativeListeners();
@@ -164,9 +194,13 @@ export class RecorderEngine implements ClarionEngine {
   }
 
   async release(): Promise<void> {
+    // Idempotent: double-release is a no-op rather than an error.
+    if (this.currentState === 'released') return;
     try {
       this.native.removeAllListeners();
       await this.native.release();
+    } catch {
+      // release() must never throw — teardown errors aren't actionable.
     } finally {
       this.listenerIds.length = 0;
       this.emitter.removeAll();
@@ -272,8 +306,12 @@ export class RecorderEngine implements ClarionEngine {
   ): ClarionError['code'] {
     const known: Record<string, ClarionError['code']> = {
       PERMISSION_DENIED: 'PERMISSION_DENIED',
+      PERMISSION_REVOKED: 'PERMISSION_REVOKED',
       AUDIO_BUSY: 'AUDIO_BUSY',
+      AUDIO_SESSION_INTERRUPTED: 'AUDIO_SESSION_INTERRUPTED',
+      AUDIO_ROUTE_CHANGED: 'AUDIO_ROUTE_CHANGED',
       IO_ERROR: 'IO_ERROR',
+      STORAGE_FULL: 'STORAGE_FULL',
       INTERRUPTED: 'INTERRUPTED',
       CANCELLED: 'CANCELLED',
       ENGINE_NOT_READY: 'ENGINE_NOT_READY',

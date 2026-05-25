@@ -3,6 +3,7 @@ import {
   ClarionError,
   assertTransition,
   fromNativeError,
+  validateLanguage,
   type ClarionEngine,
   type ClarionEvent,
   type EngineKind,
@@ -93,6 +94,10 @@ export class RecognizerEngine implements ClarionEngine {
   private currentState: EngineState = 'idle';
 
   constructor(options: RecognizerEngineOptions = { language: DEFAULT_LANGUAGE }) {
+    // Pre-flight: BCP-47 shape check. Throws ClarionError (INVALID_CONFIG)
+    // before any native work.
+    validateLanguage(options.language);
+
     this.options = options;
     this.native = createNativeRecognizer();
     this.bindNativeListeners();
@@ -185,9 +190,13 @@ export class RecognizerEngine implements ClarionEngine {
   }
 
   async release(): Promise<void> {
+    // Idempotent: double-release is a no-op rather than an error.
+    if (this.currentState === 'released') return;
     try {
       this.native.removeAllListeners();
       await this.native.release();
+    } catch {
+      // release() must never throw — anything here is teardown noise.
     } finally {
       this.listenerIds.length = 0;
       this.emitter.removeAll();
@@ -302,7 +311,10 @@ export class RecognizerEngine implements ClarionEngine {
   private mapErrorCode(code: string): ClarionError['code'] {
     const known: Record<string, ClarionError['code']> = {
       PERMISSION_DENIED: 'PERMISSION_DENIED',
+      PERMISSION_REVOKED: 'PERMISSION_REVOKED',
       AUDIO_BUSY: 'AUDIO_BUSY',
+      AUDIO_SESSION_INTERRUPTED: 'AUDIO_SESSION_INTERRUPTED',
+      AUDIO_ROUTE_CHANGED: 'AUDIO_ROUTE_CHANGED',
       IO_ERROR: 'IO_ERROR',
       INTERRUPTED: 'INTERRUPTED',
       CANCELLED: 'CANCELLED',

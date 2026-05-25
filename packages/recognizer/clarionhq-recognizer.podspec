@@ -15,6 +15,9 @@ Pod::Spec.new do |s|
 
   s.source_files = "ios/**/*.{swift,h,m,mm,cpp}"
   s.exclude_files = "ios/**/*.swift.bak"
+  # Mark Obj-C bridge header public so Swift in this pod can import it
+  # (nitrogen's auto-umbrella otherwise only lists generated .hpp files).
+  s.public_header_files = "ios/RecognizerExceptionCatcher.h"
 
   s.frameworks = "AVFoundation", "Speech"
 

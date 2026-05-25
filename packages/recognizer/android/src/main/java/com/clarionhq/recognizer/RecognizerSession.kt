@@ -43,6 +43,9 @@ internal class RecognizerSession(
 
   private val lastAudioLevelEmitMs = AtomicLong(0L)
 
+  /** Watches Android audio focus changes so we can surface clean INTERRUPTED errors. */
+  private var focusMonitor: AudioFocusMonitor? = null
+
   fun prepare() {
     if (released) throw RecognizerError("ENGINE_NOT_READY", "Session was released")
     if (!hasRecordAudioPermission()) {
@@ -61,6 +64,34 @@ internal class RecognizerSession(
     runOnMainAwait {
       recognizer = createRecognizer().apply { setRecognitionListener(listener) }
     }
+    installFocusMonitor()
+  }
+
+  /**
+   * Acquire audio focus + surface losses as clean AUDIO_SESSION_INTERRUPTED
+   * errors instead of letting the recognition silently continue with no audio.
+   */
+  private fun installFocusMonitor() {
+    if (focusMonitor != null) return
+    val m = AudioFocusMonitor(
+      context = context,
+      onFocusLost = { transient ->
+        if (!active) return@AudioFocusMonitor
+        callbacks.onError(
+          RecognizerError(
+            code = "AUDIO_SESSION_INTERRUPTED",
+            message = if (transient)
+              "Audio focus lost transiently (another app, notification)."
+            else
+              "Audio focus permanently lost — recognition stopped.",
+            recoverable = transient,
+          ),
+        )
+      },
+      onFocusRegained = { /* JS layer decides whether to retry */ },
+    )
+    m.acquire()
+    focusMonitor = m
   }
 
   fun start() {
@@ -120,6 +151,8 @@ internal class RecognizerSession(
     active = false
     stopDeferred?.complete(TranscriptBuilder.fromText(latestPartial, true, ctx))
     stopDeferred = null
+    focusMonitor?.release()
+    focusMonitor = null
     val r = recognizer ?: return
     recognizer = null
     runOnMainAwait { r.destroy() }
