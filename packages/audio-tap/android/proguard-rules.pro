@@ -1,0 +1,1 @@
+-keep class com.clarionhq.audio_tap.** { *; }

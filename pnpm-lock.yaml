@@ -100,6 +100,25 @@ importers:
         specifier: 5.0.4
         version: 5.0.4
 
+  packages/audio-tap:
+    dependencies:
+      '@clarionhq/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      nitrogen:
+        specifier: ^0.35.6
+        version: 0.35.6(react-native@0.77.3(@babel/core@7.29.0)(@babel/preset-env@7.29.5(@babel/core@7.29.0))(@react-native-community/cli@16.0.3(typescript@5.9.3))(@types/react@18.3.28)(react@18.3.1))(react@18.3.1)
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-native:
+        specifier: 0.77.3
+        version: 0.77.3(@babel/core@7.29.0)(@babel/preset-env@7.29.5(@babel/core@7.29.0))(@react-native-community/cli@16.0.3(typescript@5.9.3))(@types/react@18.3.28)(react@18.3.1)
+      react-native-nitro-modules:
+        specifier: ^0.35.6
+        version: 0.35.6(react-native@0.77.3(@babel/core@7.29.0)(@babel/preset-env@7.29.5(@babel/core@7.29.0))(@react-native-community/cli@16.0.3(typescript@5.9.3))(@types/react@18.3.28)(react@18.3.1))(react@18.3.1)
+
   packages/azure:
     dependencies:
       '@clarionhq/core':
@@ -5731,9 +5750,7 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - '@babel/preset-env'
-      - bufferutil
       - supports-color
-      - utf-8-validate
 
   '@react-native/normalize-colors@0.77.3': {}
 
