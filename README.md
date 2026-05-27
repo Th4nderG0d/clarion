@@ -4,9 +4,9 @@
 [![Android](https://github.com/Th4nderG0d/clarion/actions/workflows/android.yml/badge.svg)](https://github.com/Th4nderG0d/clarion/actions/workflows/android.yml)
 [![iOS](https://github.com/Th4nderG0d/clarion/actions/workflows/ios.yml/badge.svg)](https://github.com/Th4nderG0d/clarion/actions/workflows/ios.yml)
 
-React Native audio + speech for iOS & Android. New Architecture only, 16 KB compliant, built on [Nitro Modules](https://nitro.margelo.com).
+Pluggable audio + speech engines for React Native. One `ClarionEngine` interface across recording, on-device recognition, Azure cloud STT, shared mic fan-out, and hybrid routing. iOS + Android, New Architecture only, 16 KB compliant, built on [Nitro Modules](https://nitro.margelo.com).
 
-Microphone capture, on-device speech recognition, and Microsoft Azure cloud STT — one consistent `ClarionEngine` interface across all of them.
+A suite of composable engines behind one consistent interface — record to file, transcribe on-device, hit Microsoft Azure for cloud STT, share one mic across multiple consumers, or let the hybrid engine route between them automatically.
 
 ## Packages
 
